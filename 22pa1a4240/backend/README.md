@@ -14,7 +14,7 @@ This is the backend microservice for the URL Shortener application. It provides 
 
 1. Navigate to the `backend` directory:
    ```bash
-   cd 22pa1a4207/backend
+   cd 22pa1a4240/backend
    ```
 2. Install dependencies:
    ```bash
