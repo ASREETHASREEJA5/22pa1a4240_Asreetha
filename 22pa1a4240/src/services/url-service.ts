@@ -55,7 +55,7 @@ const exampleUrls: ShortenedUrl[] = [
 ];
 
 exampleUrls.forEach(url => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:9002';
+    const origin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
     url.shortUrl = `${origin}/${url.shortcode}`;
     saveUrl(url);
 });
