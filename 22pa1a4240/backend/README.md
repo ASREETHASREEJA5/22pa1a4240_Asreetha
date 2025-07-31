@@ -1,92 +1,104 @@
-# Backend Microservice
 
-This is the backend microservice for the URL Shortener application. It provides APIs for creating short URLs, redirecting short URLs, and retrieving statistics.
+# URL Shortener 
 
-## Features
+This backend microservice powers a simple URL Shortener application. It provides REST APIs to create, manage, and analyze short URLs with expiration and analytics tracking.
 
-- Create short URLs with optional custom shortcodes and validity periods.
-- Redirect short URLs to their original long URLs.
-- Track click analytics for each short URL.
-- Uses in-memory storage for simplicity (can be extended to a database).
-- Integrates with the custom `logging-middleware` for all logging.
+---
+## 📦 Installation
 
-## Installation
-
-1. Navigate to the `backend` directory:
+1. Navigate to the backend project folder:
    ```bash
    cd 22pa1a4240/backend
    ```
+
 2. Install dependencies:
    ```bash
    npm install
    ```
-   This will install `express`, `shortid`, `valid-url`, and the local `logging-middleware` package.
+   This will install:
+   - `express`
+   - `shortid`
+   - `valid-url`
+   - Local `logging-middleware`
 
-## Running the Application
+---
+
+## 🖥️ Running the Server
+
+Start the backend service:
 
 ```bash
 node src/app.js
 ```
 
-The server will start on `http://localhost:5000` (or the port specified in `src/app.js`).
+By default, the server runs at:  
+**http://localhost:5000**
 
-## API Endpoints
+> You can modify the port in `src/app.js`.
 
-### 1. Create Short URL
+---
 
-- **Method**: `POST`
-- **Route**: `/shorturls`
-- **Request Body**:
+## 📡 API Endpoints
 
+### 1. Create a Short URL
+
+- **Method**: `POST`  
+- **Endpoint**: `/shorturls`
+
+#### Request Body
 ```json
 {
-  "url": "https://example.com/very-long-url",
-  "validity": 30,
-  "shortcode": "abcd1"
+  "url": "https://openai.com/research/gpt-4",
+  "validity": 60,
+  "shortcode": "gpt4ai"
 }
 ```
 
-- **Response** (201 Created):
-
+#### Response (201 Created)
 ```json
 {
-  "shortLink": "http://localhost:5000/abcd1",
-  "expiry": "2025-01-01T00:30:00Z"
+  "shortLink": "http://localhost:5000/gpt4ai",
+  "expiry": "2025-12-01T12:00:00Z"
 }
 ```
 
-### 2. Redirect Short URL
+---
 
-- **Method**: `GET`
-- **Route**: `/:shortcode`
-- **Functionality**: Redirects to the original URL and tracks click metadata.
+### 2. Redirect to Original URL
 
-### 3. Get Statistics
+- **Method**: `GET`  
+- **Endpoint**: `/:shortcode`
 
-- **Method**: `GET`
-- **Route**: `/shorturls/:shortcode`
-- **Response** (200 OK):
+#### Function
+Redirects the user to the original long URL and logs click metadata.
 
+---
+
+### 3. Get URL Statistics
+
+- **Method**: `GET`  
+- **Endpoint**: `/shorturls/:shortcode`
+
+#### Response (200 OK)
 ```json
 {
-  "shortcode": "abcd1",
-  "originalUrl": "https://example.com/very-long-url",
-  "createdAt": "2025-01-01T00:00:00Z",
-  "expiryAt": "2025-01-01T00:30:00Z",
-  "totalClicks": 5,
+  "shortcode": "gpt4ai",
+  "originalUrl": "https://openai.com/research/gpt-4",
+  "createdAt": "2025-12-01T11:00:00Z",
+  "expiryAt": "2025-12-01T12:00:00Z",
+  "totalClicks": 3,
   "detailedClicks": [
     {
-      "timestamp": "2025-01-01T00:05:00Z",
-      "referrer": "https://google.com",
-      "ip": "192.168.1.1"
+      "timestamp": "2025-12-01T11:15:00Z",
+      "referrer": "https://twitter.com",
+      "ip": "203.0.113.10"
+    },
+    {
+      "timestamp": "2025-12-01T11:30:00Z",
+      "referrer": "https://linkedin.com",
+      "ip": "203.0.113.11"
     }
   ]
 }
 ```
 
-## Error Handling
-
-- `400 Bad Request`: Invalid URL or shortcode format.
-- `409 Conflict`: Custom shortcode already exists.
-- `404 Not Found`: Short URL not found.
-- `410 Gone`: Short URL has expired.
